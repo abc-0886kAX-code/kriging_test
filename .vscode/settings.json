@@ -1,0 +1,14 @@
+{
+    "editor.formatOnSave": true,
+    "git.ignoreLimitWarning": true,
+    "fileheader.customMade": {
+        "FilePath": "Do not edit",
+        "Author": "zhangxin",
+        "Date": "Do not edit",
+        "LastEditors": "zhangxin",
+        "LastEditTime": "Do not edit",
+        "Description": ""
+    },
+    "workbench.colorCustomizations": {},
+    "path-intellisense.mappings": {}
+}
