@@ -3,27 +3,27 @@
  * @Author: zhangxin
  * @Date: 2023-04-28 17:44:34
  * @LastEditors: zhangxin
- * @LastEditTime: 2023-04-28 17:57:05
+ * @LastEditTime: 2023-05-04 10:04:41
  * @Description:
  */
 import * as mars3d from "mars3d";
 
 // 根据 克里金法 插值绘制图片
 export function loadkriging(tempture, bounds, colors) {
-    console.log(kriging);
     // let canvas = document.createElement("canvas")
     const canvas = mars3d.DomUtil.create("canvas");
     canvas.width = 2000;
     canvas.height = 2000;
-
+    console.log(tempture);
     const t = [];
     const x = [];
     const y = [];
-    for (let i = 0, len = tempture.length; i < len; i++) {
-        t.push(tempture[i].properties.Temperatur); // 权重值
-        x.push(tempture[i].geometry.coordinates[0]); // x
-        y.push(tempture[i].geometry.coordinates[1]); // y
+    for (let i = 0, len = tempture.features.length; i < len; i++) {
+        t.push(tempture.features[i].properties.Temperatur); // 权重值
+        x.push(tempture.features[i].geometry.coordinates[0]); // x
+        y.push(tempture.features[i].geometry.coordinates[1]); // y
     }
+    console.log(t, x, y);
     // 1.用克里金训练一个variogram对象
 
     const variogram = kriging.train(t, x, y, "exponential", 0, 100);
