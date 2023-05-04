@@ -1,4 +1,5 @@
 import BJGeoJson from "./BJGeoJson.json";
+import SQ from "./SQ.json";
 import { Cesium, layer } from "mars3d";
 const { ImageLayer } = layer;
 
@@ -40,14 +41,18 @@ kriging.plot = function (canvas, grid, xlim, ylim, colors) {
 function mapColorValue(value, oldMin, oldMax, newMin, newMax) {
     return ((value - oldMin) * (newMax - newMin)) / (oldMax - oldMin) + newMin;
 }
+const GeoJson = {
+    QS: BJGeoJson,
+    SQ: SQ,
+};
 
-export function useKrigingGrid() {
+export function useKrigingGrid(type) {
     const canvas = ref(null);
     const result = ref({});
 
     const ex = computed(() => {
         // 判断是北京范围还是山区范围
-        return BJGeoJson.features.map((item) => {
+        return GeoJson[type].features.map((item) => {
             return item.geometry.coordinates[0][0];
         });
     });
@@ -75,7 +80,6 @@ export function useKrigingGrid() {
 
     function setupShape(data) {
         result.value = data;
-
         const extent = Cesium.PolygonGeometry.computeRectangle({
             polygonHierarchy: new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArray(unref(coords))),
         });

@@ -2,9 +2,15 @@
 import { useMars3d } from "@/biz/Mars3D/usecase/useMars3D";
 import { useKrigingGrid } from "./useKrigingGrid.js";
 import Data from "./test.json";
+const props = defineProps({
+    type: String,
+});
+
+const type = computed(() => props.type);
+
 const layer = ref(null);
 const { mapview } = useMars3d();
-const { setupShape, getCanvasRatio } = useKrigingGrid();
+const { setupShape, getCanvasRatio } = useKrigingGrid(unref(type));
 
 function executeQuery() {
     clear();
@@ -14,7 +20,7 @@ function executeQuery() {
 }
 function clear() {
     if (unref(layer)) {
-        unref(mapview).removeLayer(layer, true);
+        unref(mapview).removeLayer(unref(layer), true);
         layer.value = null;
     }
 }
@@ -24,9 +30,15 @@ function exportParams() {
     console.log(params);
 }
 
-onMounted(() => {
-    executeQuery();
-});
+watch(
+    type,
+    (type) => {
+        executeQuery();
+    },
+    {
+        immediate: true,
+    }
+);
 
 onBeforeUnmount(() => {
     clear();
@@ -36,14 +48,15 @@ onBeforeUnmount(() => {
 <template>
     <div class="test">
         <el-button @click="exportParams">导出</el-button>
+        <el-button @click="clear">销毁</el-button>
     </div>
 </template>
 
 <style scoped lang="scss">
 .test {
     position: absolute;
-    top: 0;
-    left: 0;
+    bottom: 24px;
+    right: 24px;
     z-index: 302;
 }
 </style>
